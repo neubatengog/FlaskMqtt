@@ -12,6 +12,8 @@
     <!-- styles -->
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
 
+
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -59,11 +61,11 @@
 		  	<div class="sidebar content-box" style="display: block;">
                 <ul class="nav">
                     <!-- Main menu -->
-                    <li><a href="index.html"><i class="glyphicon glyphicon-home"></i> Dashboard</a></li>
+                    <li><a href="../"><i class="glyphicon glyphicon-home"></i> Dashboard</a></li>
                     
                    
-                    <li class="current"><a href="tables.html"><i class="glyphicon glyphicon-list"></i>Monitor</a></li>
-                    <li><a href="buttons.html"><i class="glyphicon glyphicon-record"></i> Consola</a></li>
+                    <li class="current"><a href="../monitor/"><i class="glyphicon glyphicon-list"></i>Monitor</a></li>
+                    <li class="current"><a href="../consola/"><i class="glyphicon glyphicon-record"></i> Consola</a></li>
                 
                     <li class="submenu">
                          <a href="#">
@@ -84,7 +86,9 @@
 {% block contenido %}
     
 {% endblock %}  
-
+      </div>
+    </div>
+  </div>
 
  <footer>
          <div class="container">
@@ -100,6 +104,10 @@
 <link href="https://cdn.datatables.net/autofill/1.2.1/css/dataTables.autoFill.css" rel="stylesheet" media="screen">
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
+
+     <script src="{{ url_for('static', filename='js/socket.io.min.js') }}"></script>
+    
     <!-- jQuery UI -->
     <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -110,27 +118,10 @@
     <!--<script src="{{ url_for('static', filename='vendors/datatables/dataTables.bootstrap.js') }}"></script>-->
 
     <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
-     <script src="http://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.js"></script>
-    <script>
-    $(document).ready(function() {
-         var table = $('#equipos').DataTable();
-         table
-             .column(3)
-             .data()
-             .each( function ( value, index ) {
-                  console.log( 'Data in index: '+index+' is: '+value );
-          } );
-  
+    
+   
 
-
-    });
-
- 
-      
-
-
-
-    </script>
+    <script src="{{ url_for('static', filename='js/tst.js') }}"></script>
   </body>
 </html>
 

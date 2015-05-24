@@ -38,3 +38,52 @@ var apellidos = $(this).find("td").eq(3).html();
           },          
             "ajax": "../data/datos.json"
           });
+
+  <script>
+    $(document).ready(function() {
+         var table = $('#equipos').DataTable();
+         table
+             .column(3)
+             .data()
+             .each( function ( value, index ) {
+                  console.log( 'Data in index: '+index+' is: '+value );
+          } );
+  
+
+
+    });
+
+ 
+      
+
+
+
+    </script>
+
+
+
+
+     $.ajax({ url: "conf", cache: false, success: function(data){
+            $("#emonhubconf").val(data);
+        }});
+        
+        $("#saveconf").click(function(){
+            $.ajax({ type:'POST', url: "conf", contentType: "text/plain", data: $("#emonhubconf").val() });
+        });
+        
+        $("#start-emonhub").click(function(){
+            $.ajax({ type:'POST', url: "emonhub/start"});
+        });
+        
+        $("#stop-emonhub").click(function(){
+            $.ajax({ type:'POST', url: "emonhub/start"});
+        });
+        
+        $("#restart-emonhub").click(function(){
+            $.ajax({ type:'POST', url: "emonhub/restart"});
+        });
+        
+        $(window).on('hashchange', function() {
+            view = (window.location.hash).substring(1);
+            show_view();
+        });

@@ -1,42 +1,61 @@
+from gevent import monkey
+monkey.patch_all()
+
+
 from flask import Flask, render_template, session, request, redirect, Response
+
 from flask.ext.socketio import SocketIO, emit
+
+
 from flask import jsonify
 
 import paho.mqtt.client as mqtt
 from db import Accionwtec
+
+from threading import Thread
 
 
 
 
 app = Flask(__name__)
 app.debug = True
+mqtt_thread = None
 socketio = SocketIO(app)
 
 
+class MQTT_Thread(Thread):
+	def __init__(self):
+		Thread.__init__(self)
+		self.stop = False
 
+	def run(self):
+		while not self.stop and client.loop_forever() == 0:
+			pass
+
+		print "MQTT Thread Closed"
 
 #----------------RUTAS---------------#
 
 @app.route('/')
 def  index():
 	listado_equipos = Accionwtec.AccionWtec().listarEquipos()
-	#equipos=listado_equipos
-	return render_template ('tables.html')
-
-@app.route('/equipos')
-def  equipos():
-	listado_equipos = Accionwtec.AccionWtec().listarEquipos()
-	equipos=listado_equipos
+	equipos = listado_equipos
 	return render_template ('tables2.html', datos = equipos )
 
-@app.route('/consola')
+@app.route('/monitor/')
+def  equipos():
+	listado_equipos = Accionwtec.AccionWtec().listarEquipos()
+	equipos = listado_equipos
+	return render_template ('tables2.html', datos = equipos )
+
+@app.route('/consola/')
 def consola():
 	return render_template ('forms.html')
 
 @app.route('/data/datos.json')
 def  jsonEquipos():
 	listado_equipos = Accionwtec.AccionWtec().listarEquipos()
-	return jsonify(data=listado_equipos)
+	return jsonify(data = listado_equipos)
 
 
 #--------------FIN RUTAS------------#
@@ -87,10 +106,7 @@ def on_connect(client, userdata, rc):
 		print "Conexion rechazada COD:[{0}]".format(str(rc))
 
 def on_message(client, userdata, message):
-	print("Valor recibido: '" + str(message.payload) + "' en topic: '"
-		+ message.topic + "' con QOS " + str(message.qos))
-	parsear(str(message.topic), str(message.payload))
-	socketio.emit('my response', { 'topic' :message.topic, 'payload':message.payload} , namespace='/test')
+	socketio.emit('my response', { 'topic' :message.topic, 'payload':message.payload } , namespace='/test')
 	
 
 def on_disconnect(client, userdata, rc):
@@ -105,7 +121,7 @@ def test_message(message):
 
 @socketio.on('connect', namespace='/test')
 def test_connect():
-    pass
+	socketio.emit('mi conexion', {'data': 'Connectado'})
 
 @socketio.on('disconnect', namespace='/test')
 def test_disconnect():
@@ -113,15 +129,22 @@ def test_disconnect():
 
 #-------------FIN MQTT---------------#
 
+client = mqtt.Client()
+client.on_connect = on_connect
+client.on_message = on_message
+client.connect("dev.wtec.cl", 1883, 60)
+
+
 def main():
-	app.run(host='0.0.0.0', port=9080)
+	#app.run(host='0.0.0.0', port=9080)
+	
 	try:
-		client = mqtt.Client()
-		client.on_connect = on_connect
-		client.on_message = on_message
-		client.connect("dev.wtec.cl", 1883, 6)
 		
-		client.loop_forever()
+		mqtt_thread = MQTT_Thread()
+		mqtt_thread.start()
+		socketio.run(app, host='0.0.0.0',port=8000)
+
+		
 	except Exception, e:
 		client.disconnect
 		client.reconnect()
