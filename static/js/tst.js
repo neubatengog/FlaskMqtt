@@ -3,6 +3,7 @@
 
     
     $(document).ready(function(){
+        
         view = (window.location.hash).substring(1);
         
         
@@ -16,7 +17,8 @@
        
         socket.on('my response', function(msg) {
             console.log(msg)
-            $('.console-out').append(msg.topic+" "+msg.payload+"\n");
+           
+            $('.console-out').append("[COMANDO:"+msg.topic+"] [VALOR:"+msg.payload+"]\n");
             var h = parseInt($('#log')[0].scrollHeight);
             $('#log').scrollTop(h);
             
