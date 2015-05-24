@@ -48,6 +48,14 @@ def  equipos():
 	equipos = listado_equipos
 	return render_template ('tables2.html', datos = equipos )
 
+@app.route('/comando',methods = ['GET','POST'])
+def conf():
+	if request.method == 'POST':
+			client.publish("CONF/"+request.data)
+			return "ok"
+	else:
+		return Response(content, mimetype='text/plain')
+
 @app.route('/consola/')
 def consola():
 	return render_template ('forms.html')
@@ -56,6 +64,8 @@ def consola():
 def  jsonEquipos():
 	listado_equipos = Accionwtec.AccionWtec().listarEquipos()
 	return jsonify(data = listado_equipos)
+
+
 
 
 #--------------FIN RUTAS------------#
@@ -92,7 +102,7 @@ def parsear(topic,datos):
 def on_connect(client, userdata, rc):
 	if rc == 0:
 		print "Conexion exitosa al servidor COD:[{0}]".format(str(rc))
-		client.subscribe("DATA/#")
+		client.subscribe("CONF/#")
 
 	if rc == 1:
 		print "Conexion rechazada COD:[{0}]".format(str(rc))
