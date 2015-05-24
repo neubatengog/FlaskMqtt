@@ -1,0 +1,53 @@
+{% extends 'cabecera.html'  %}
+
+{% block contenido %}
+  			<div class="content-box-large">
+  				
+  				<div class="panel-body">
+  					<table class="display " cellspacing="0" width="100%" id="equipos">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Nombre</th>
+								<th>Serie</th>
+								<th>Conexion</th>
+								<th>Actualizacion</th>
+								
+								
+							</tr>
+						</thead>
+						<tbody>
+							{% for equipo in datos %}
+							<tr>
+								<td>{{equipo[0]}} </td>
+								<td>{{equipo[1]}} </td>
+								<td>{{equipo[2]}} </td>
+								<td>{{equipo[3]}} </td>
+								<td>{{equipo[4]}}
+							</tr>
+							{% endfor %}
+						</tbody>
+						<tfood>
+							<tr>
+
+								
+								<th>Nombre</th>
+								<th>Serie</th>
+								<th>Conexion</th>
+								<th>Actualizacion</th>
+								
+								
+							</tr>
+						</tfood>
+					</table>
+  				</div>
+  			</div>
+
+
+
+		  </div>
+		</div>
+    </div>
+{% endblock %}
+
+   
