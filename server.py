@@ -23,21 +23,16 @@ class MQTT_Thread(Thread):
 	def run(self):
 		while not self.stop and client.loop_forever() == 0:
 			pass
-		print "MQTT Thread Closed"
+		print "MQTT Thread terminado"
 
 #----------------RUTAS---------------#
-
 @app.route('/')
-def  index():
-	listado_equipos = Accionwtec.AccionWtec().listarEquipos()
-	equipos = listado_equipos
-	return render_template ('tables2.html', datos = equipos )
-
 @app.route('/monitor/')
 def  equipos():
 	listado_equipos = Accionwtec.AccionWtec().listarEquipos()
 	equipos = listado_equipos
 	return render_template ('tables2.html', datos = equipos )
+
 
 @app.route('/comando',methods = ['GET','POST'])
 def conf():
@@ -90,20 +85,20 @@ def parsear(topic,datos):
 
 def on_connect(client, userdata, rc):
 	if rc == 0:
-		print "Conexion exitosa al servidor COD:[{0}]".format(str(rc))
+		print "Conectado al servidor MQTT COD:[{0}]".format(str(rc))
 		client.subscribe("RESP/#")
 	elif rc != 0:
-		print "Conexion rechazada COD:[{0}]".format(str(rc))
+		print "Conexion rechazada al servidor MQTT COD:[{0}]".format(str(rc))
 	
 def on_message(client, userdata, message):
-	socketio.emit('my response', { 'topic' :message.topic, 'payload':message.payload } , namespace='/test')
+	socketio.emit('server respuesta', { 'topic' :message.topic, 'payload':message.payload } , namespace='/test')
 	
 def on_disconnect(client, userdata, rc):
 	if rc != 0:
-		print("Desconexion inesperada.")
-	print "Desconexion"
+		print "Desconexion inesperada al servidor MQTT COD:[{0}]".format(str(rc))
+	
 
-@socketio.on('my event', namespace='/test')
+@socketio.on('cliente mensaje', namespace='/test')
 def test_message(message):
     pass
 

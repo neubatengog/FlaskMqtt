@@ -11,11 +11,11 @@
         //var socket = io.connect('http://192.168.227.133:8000' + namespace);
         var socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
         socket.on('connect', function() {
-            socket.emit('my event', { data: 'conectado'});
+            socket.emit('cliente mensaje', { data: 'conectado'});
            
         });
        
-        socket.on('my response', function(msg) {
+        socket.on('server respuesta', function(msg) {
             console.log(msg)
            
             $('.console-out').append("[COMANDO:"+msg.topic+"] [VALOR:"+msg.payload+"]\n");
