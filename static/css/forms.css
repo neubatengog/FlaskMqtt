@@ -1,0 +1,11 @@
+pre {
+    
+    margin:0px;
+    padding:0px;
+    font-size:16px;
+    color:#fff;
+    background-color:#300a24;
+    overflow: scroll;
+    overflow-x: hidden;
+    
+}
